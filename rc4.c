@@ -22,7 +22,9 @@ void *w_memcpy(void *src, size_t size) {
 }
 
 void swap(t_rc4 *rc4) {
-	uint8_t temp = rc4->S[rc4->i];
+	uint8_t temp;
+
+	temp = rc4->S[rc4->i];
 	rc4->S[rc4->i] = rc4->S[rc4->j];
 	rc4->S[rc4->j] = temp;
 }
@@ -57,14 +59,17 @@ uint8_t *rc4_encode(t_rc4 *rc4, uint8_t *in_buf, uint64_t in_len) {
 	for (uint64_t i = 0; i < in_len; i++) {
 		*(outbuf + i) = *(in_buf + i) ^ rc4_prga(rc4);
 	}
+	
 	return outbuf;
 }
 
 uint8_t* wrap_rc4(uint8_t *key, uint64_t kl, uint8_t *data, uint64_t dl) {
 	uint8_t *out_buf;
 	t_rc4	rc4;
+	
 	rc4_init_stream(&rc4);
 	rc4_setup_keystream(&rc4, key, kl);
 	out_buf = rc4_encode(&rc4, data, dl);
+	
 	return out_buf;
 }
